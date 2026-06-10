@@ -1,17 +1,13 @@
 "use client";
-
 import { Lang, OTHER_PLACEHOLDER, Question, SCALE_LABELS, UI_TEXT } from "../data/survey";
-
 export type AnswerValue =
   | string
   | string[]
   | Record<string, number>
   | undefined;
-
 export interface AnswersMap {
   [key: string]: AnswerValue;
 }
-
 interface QuestionFieldProps {
   question: Question;
   lang: Lang;
@@ -20,13 +16,9 @@ interface QuestionFieldProps {
   error?: boolean;
   followUpError?: boolean;
 }
-
-// text-base (16px) on inputs avoids iOS Safari auto-zoom on focus
 const inputBase =
   "w-full rounded-xl border border-cf-gray-light bg-white px-4 py-3 text-base text-foreground placeholder:text-cf-gray/60 focus:outline-none focus:ring-2 focus:ring-cf-purple focus:border-cf-purple transition";
-
 const inputError = "border-red-300 focus:ring-red-400 focus:border-red-400";
-
 export default function QuestionField({
   question,
   lang,
@@ -36,7 +28,6 @@ export default function QuestionField({
   followUpError,
 }: QuestionFieldProps) {
   const value = answers[question.id];
-
   return (
     <div
       className={`mb-8 rounded-xl sm:mb-10 ${
@@ -44,7 +35,6 @@ export default function QuestionField({
       }`}
     >
       <QuestionHeader question={question} lang={lang} error={error} />
-
       {question.type === "text" && (
         <input
           type="text"
@@ -54,7 +44,6 @@ export default function QuestionField({
           onChange={(e) => setAnswer(question.id, e.target.value)}
         />
       )}
-
       {question.type === "textarea" && (
         <textarea
           className={`${inputBase} min-h-[110px] resize-y ${error ? inputError : ""}`}
@@ -63,27 +52,31 @@ export default function QuestionField({
           onChange={(e) => setAnswer(question.id, e.target.value)}
         />
       )}
-
       {question.type === "radio" && (
         <RadioOptions question={question} lang={lang} answers={answers} setAnswer={setAnswer} />
       )}
-
       {(question.type === "checkbox" || question.type === "checkboxLimit") && (
         <CheckboxOptions question={question} lang={lang} answers={answers} setAnswer={setAnswer} />
       )}
-
+      {/* 3. เพิ่มการเรนเดอร์ประเภท Dropdown (Select) ตรงนี้ */}
+      {question.type === "select" && (
+        <SelectField
+          question={question}
+          lang={lang}
+          answers={answers}
+          setAnswer={setAnswer}
+          error={error}
+        />
+      )}
       {question.type === "matrix" && (
         <MatrixField question={question} lang={lang} answers={answers} setAnswer={setAnswer} />
       )}
-
       {question.type === "ranking" && (
         <RankingField question={question} lang={lang} answers={answers} setAnswer={setAnswer} />
       )}
-
       {error && (
         <p className="mt-2 text-xs font-medium text-red-600">{UI_TEXT.errorRequired[lang]}</p>
       )}
-
       {question.followUp && (
         <div
           className={`mt-4 ${
@@ -104,6 +97,49 @@ export default function QuestionField({
             <p className="mt-2 text-xs font-medium text-red-600">{UI_TEXT.errorRequired[lang]}</p>
           )}
         </div>
+      )}
+    </div>
+  );
+}
+// 4. เพิ่มฟังก์ชันคอมโพเนนต์ SelectField เพื่อแสดง Dropdown และรองรับตัวเลือก "อื่น ๆ"
+function SelectField({ question, lang, answers, setAnswer, error }: QuestionFieldProps) {
+  const selected = (answers[question.id] as string) ?? "";
+  const selectedOpt = question.options?.find((opt) => opt.id === selected);
+  return (
+    <div className="space-y-2">
+      <div className="relative">
+        <select
+          value={selected}
+          onChange={(e) => setAnswer(question.id, e.target.value)}
+          className={`${inputBase} appearance-none pr-10 cursor-pointer ${
+            error ? inputError : ""
+          }`}
+        >
+          <option value="" disabled>
+            {lang === "th" ? "-- กรุณาเลือก --" : "-- Please select --"}
+          </option>
+          {question.options!.map((opt) => (
+            <option key={opt.id} value={opt.id}>
+              {opt.label[lang]}
+            </option>
+          ))}
+        </select>
+        {/* ไอคอนลูกศรชี้ลง ดีไซน์สวยงาม */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-cf-gray/60">
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+      {/* ถ้าผู้ใช้เลือกกลุ่มตัวเลือก "อื่น ๆ" (isOther) ให้แสดงช่องกรอกข้อความเสริมด้านล่าง */}
+      {selectedOpt?.isOther && (
+        <input
+          type="text"
+          className={`${inputBase} mt-2`}
+          placeholder={OTHER_PLACEHOLDER[lang]}
+          value={(answers[`${question.id}__other`] as string) ?? ""}
+          onChange={(e) => setAnswer(`${question.id}__other`, e.target.value)}
+        />
       )}
     </div>
   );

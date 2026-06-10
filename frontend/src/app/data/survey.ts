@@ -24,7 +24,8 @@ export type QuestionType =
   | "checkboxLimit"
   | "matrix"
   | "ranking"
-  | "textarea";
+  | "textarea"
+  | "select";
 
 export interface Question {
   id: string;
@@ -97,10 +98,108 @@ export const SECTIONS: Section[] = [
     questions: [
       {
         id: "q1_team",
-        type: "text",
+        type: "select", // <-- 2. เปลี่ยนประเภทจาก "text" เป็น "select"
         number: 1,
         title: { th: "ทีม / หน่วยงาน", en: "Team / Department" },
-        placeholder: { th: "ระบุชื่อทีมหรือหน่วยงาน", en: "Enter your team or department" },
+        options: [
+          {
+            id: "sb_acquiring_1",
+            label: { th: "Small Business Acquiring 1", en: "Small Business Acquiring 1" },
+          },
+          {
+            id: "sb_acquiring_1_t1",
+            label: { th: "Small Business Acquiring 1 ทีม 1", en: "Small Business Acquiring 1 Team 1" },
+          },
+          {
+            id: "sb_acquiring_1_t2",
+            label: { th: "Small Business Acquiring 1 ทีม 2", en: "Small Business Acquiring 1 Team 2" },
+          },
+          {
+            id: "sb_acquiring_1_t3",
+            label: { th: "Small Business Acquiring 1 ทีม 3", en: "Small Business Acquiring 1 Team 3" },
+          },
+          {
+            id: "sb_acquiring_1_t4",
+            label: { th: "Small Business Acquiring 1 ทีม 4", en: "Small Business Acquiring 1 Team 4" },
+          },
+          {
+            id: "sb_acquiring_2",
+            label: { th: "Small Business Acquiring 2", en: "Small Business Acquiring 2" },
+          },
+          {
+            id: "sb_acquiring_2_t1",
+            label: { th: "Small Business Acquiring 2 ทีม 1", en: "Small Business Acquiring 2 Team 1" },
+          },
+          {
+            id: "sb_acquiring_2_t2",
+            label: { th: "Small Business Acquiring 2 ทีม 2", en: "Small Business Acquiring 2 Team 2" },
+          },
+          {
+            id: "personal_acquiring_1",
+            label: { th: "Personal Acquiring 1", en: "Personal Acquiring 1" },
+          },
+          {
+            id: "personal_acquiring_1_t1",
+            label: { th: "Personal Acquiring 1 Team 1", en: "Personal Acquiring 1 Team 1" },
+          },
+          {
+            id: "personal_acquiring_1_t2",
+            label: { th: "Personal Acquiring 1 Team 2", en: "Personal Acquiring 1 Team 2" },
+          },
+          {
+            id: "personal_acquiring_1_t3",
+            label: { th: "Personal Acquiring 1 Team 3", en: "Personal Acquiring 1 Team 3" },
+          },
+          {
+            id: "personal_acquiring_3",
+            label: { th: "Personal Acquiring 3", en: "Personal Acquiring 3" },
+          },
+          {
+            id: "personal_acquiring_3_t1",
+            label: { th: "Personal Acquiring 3 Team 1", en: "Personal Acquiring 3 Team 1" },
+          },
+          {
+            id: "personal_acquiring_3_t2",
+            label: { th: "Personal Acquiring 3 Team 2", en: "Personal Acquiring 3 Team 2" },
+          },
+          {
+            id: "corporate_employee_banking",
+            label: { th: "Corporate Employee Banking", en: "Corporate Employee Banking" },
+          },
+          {
+            id: "home_loan_acquiring_1",
+            label: { th: "Home Loan Acquiring 1", en: "Home Loan Acquiring 1" },
+          },
+          {
+            id: "home_loan_acquiring_2",
+            label: { th: "Home Loan Acquiring 2", en: "Home Loan Acquiring 2" },
+          },
+          {
+            id: "home_loan_acquiring_3",
+            label: { th: "Home Loan Acquiring 3", en: "Home Loan Acquiring 3" },
+          },
+          {
+            id: "personal_acquiring_2",
+            label: { th: "Personal Acquiring 2", en: "Personal Acquiring 2" },
+          },
+          {
+            id: "cross_sell_lending",
+            label: { th: "Cross Sell Lending", en: "Cross Sell Lending" },
+          },
+          {
+            id: "cross_sell_non_life_insurance",
+            label: { th: "Cross Sell Non-Life Insurance", en: "Cross Sell Non-Life Insurance" },
+          },
+          {
+            id: "back_office",
+            label: { th: "Back office", en: "Back office" },
+          },
+          {
+            id: "other",
+            label: { th: "อื่น ๆ (ระบุชื่อทีม/หน่วยงาน)", en: "Other (please specify)" },
+            isOther: true,
+          },
+        ],
       },
       {
         id: "q2_role",

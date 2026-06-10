@@ -389,4 +389,8 @@ export const UI_TEXT = {
   thankYouTitle: { th: "ขอบคุณค่ะ / ครับ!", en: "Thank you!" },
   backToHome: { th: "กลับสู่หน้าแรก", en: "Back to home" },
   errorRequired: { th: "กรุณาตอบคำถามนี้ก่อนไปต่อ", en: "Please answer this question before continuing" },
+  submitError: {
+    th: "เกิดข้อผิดพลาดในการส่งแบบสอบถาม กรุณาลองใหม่อีกครั้ง",
+    en: "Something went wrong submitting your feedback. Please try again.",
+  },
 };

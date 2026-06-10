@@ -15,6 +15,7 @@ import Logo from "./Logo";
 import LangToggle from "./LangToggle";
 import ProgressBar from "./ProgressBar";
 import QuestionField, { AnswersMap, AnswerValue } from "./QuestionField";
+import { submitFeedback } from "../lib/api";
 
 type Step = "intro" | "done" | number;
 
@@ -23,6 +24,7 @@ export default function SurveyForm() {
   const [step, setStep] = useState<Step>("intro");
   const [answers, setAnswers] = useState<AnswersMap>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const setAnswer = (key: string, value: AnswerValue) => {
     setAnswers((prev) => ({ ...prev, [key]: value }));
@@ -61,18 +63,19 @@ export default function SurveyForm() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
+    setSubmitError(false);
     try {
-      // TODO: wire this up once a backend / Google Sheet / KKP API endpoint
-      // is available. For now we just log the structured answers.
       const payload = {
         submittedAt: new Date().toISOString(),
         lang,
         answers,
       };
-      console.log("CF BOT feedback submission", payload);
-      await new Promise((resolve) => setTimeout(resolve, 400));
+      await submitFeedback(payload);
       setStep("done");
       scrollToTop();
+    } catch (err) {
+      console.error("CF BOT feedback submission failed", err);
+      setSubmitError(true);
     } finally {
       setSubmitting(false);
     }
@@ -113,6 +116,7 @@ export default function SurveyForm() {
             onNext={goNext}
             onBack={goBack}
             submitting={submitting}
+            submitError={submitError}
           />
         )}
 
@@ -181,6 +185,7 @@ function SectionScreen({
   onNext,
   onBack,
   submitting,
+  submitError,
 }: {
   sectionIndex: number;
   lang: Lang;
@@ -189,6 +194,7 @@ function SectionScreen({
   onNext: () => void;
   onBack: () => void;
   submitting: boolean;
+  submitError: boolean;
 }) {
   const section = SECTIONS[sectionIndex];
   const isLast = sectionIndex === SECTIONS.length - 1;
@@ -208,6 +214,12 @@ function SectionScreen({
           <QuestionField key={q.id} question={q} lang={lang} answers={answers} setAnswer={setAnswer} />
         ))}
       </div>
+
+      {isLast && submitError && (
+        <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+          {UI_TEXT.submitError[lang]}
+        </p>
+      )}
 
       {/* Inline nav for larger screens; mobile uses the fixed bottom bar */}
       <SectionNav

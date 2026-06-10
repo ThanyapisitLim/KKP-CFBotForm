@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a2e;
+
+  /* KKP / CF Consumer Finance brand palette */
+  --cf-purple: #6d6fae;
+  --cf-purple-dark: #4f5189;
+  --cf-purple-darker: #383a66;
+  --cf-purple-light: #eceeF9;
+  --cf-purple-lighter: #f6f7fc;
+  --cf-black: #0a0a0a;
+  --cf-gray: #6b7280;
+  --cf-gray-light: #e5e7eb;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-cf-purple: var(--cf-purple);
+  --color-cf-purple-dark: var(--cf-purple-dark);
+  --color-cf-purple-darker: var(--cf-purple-darker);
+  --color-cf-purple-light: var(--cf-purple-light);
+  --color-cf-purple-lighter: var(--cf-purple-lighter);
+  --color-cf-black: var(--cf-black);
+  --color-cf-gray: var(--cf-gray);
+  --color-cf-gray-light: var(--cf-gray-light);
+  --font-sans: var(--font-noto-thai), var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Custom scrollbar for a slightly more polished feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cf-purple-light);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cf-purple);
+}

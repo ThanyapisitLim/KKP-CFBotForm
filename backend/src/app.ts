@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import { env } from "./config/env";
 import feedbackRoutes from "./routes/feedback.routes";
+import adminRoutes from "./routes/admin.routes";
 
 export function createApp(): Express {
   const app = express();
@@ -20,6 +21,7 @@ export function createApp(): Express {
   });
 
   app.use("/api/feedback", feedbackRoutes);
+  app.use("/api/admin", adminRoutes);
 
   // 404 fallback
   app.use((_req: Request, res: Response) => {

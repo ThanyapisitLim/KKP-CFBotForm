@@ -1,4 +1,4 @@
-import { FeedbackItem } from "../lib/api";
+import { FeedbackItem } from "./api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 

@@ -9,7 +9,10 @@
 // server-side session storage while still preventing forged cookies (the
 // value can't be guessed without the secret).
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+// This runs server-side (in the Next.js route handler), so it calls the
+// backend directly rather than through the "/api/feedback" rewrite.
+const API_URL =
+  process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 export const ADMIN_SESSION_COOKIE = "cf_admin_session";
 export const ADMIN_SESSION_MAX_AGE = 60 * 60 * 8; // 8 hours

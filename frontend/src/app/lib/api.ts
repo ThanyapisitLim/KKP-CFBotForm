@@ -1,7 +1,10 @@
 import { AnswersMap } from "../components/QuestionField";
 import { Lang } from "../data/survey";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+// By default, calls go to "/api/feedback" (same-origin), which Next.js
+// rewrites to the backend (see next.config.ts / BACKEND_API_URL). Set
+// NEXT_PUBLIC_API_URL to call a backend on a different origin directly.
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export interface FeedbackPayload {
   submittedAt: string;

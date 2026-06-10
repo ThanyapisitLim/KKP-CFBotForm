@@ -1,0 +1,26 @@
+# Render Blueprint for the backend API.
+# In Render: New -> Blueprint -> select this repo -> it will detect this file.
+# (This only deploys /backend; the frontend is deployed separately on Vercel.)
+
+services:
+  - type: web
+    name: cf-bot-feedback-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Render injects PORT automatically; the app reads it via process.env.PORT.
+      - key: MONGODB_URI
+        sync: false
+      # Set to your Vercel frontend URL, e.g. https://cf-bot-feedback.vercel.app
+      - key: CORS_ORIGIN
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

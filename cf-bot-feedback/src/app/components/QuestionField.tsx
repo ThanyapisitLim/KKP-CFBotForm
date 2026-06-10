@@ -17,23 +17,38 @@ interface QuestionFieldProps {
   lang: Lang;
   answers: AnswersMap;
   setAnswer: (key: string, value: AnswerValue) => void;
+  error?: boolean;
+  followUpError?: boolean;
 }
 
 // text-base (16px) on inputs avoids iOS Safari auto-zoom on focus
 const inputBase =
   "w-full rounded-xl border border-cf-gray-light bg-white px-4 py-3 text-base text-foreground placeholder:text-cf-gray/60 focus:outline-none focus:ring-2 focus:ring-cf-purple focus:border-cf-purple transition";
 
-export default function QuestionField({ question, lang, answers, setAnswer }: QuestionFieldProps) {
+const inputError = "border-red-300 focus:ring-red-400 focus:border-red-400";
+
+export default function QuestionField({
+  question,
+  lang,
+  answers,
+  setAnswer,
+  error,
+  followUpError,
+}: QuestionFieldProps) {
   const value = answers[question.id];
 
   return (
-    <div className="mb-8 sm:mb-10">
-      <QuestionHeader question={question} lang={lang} />
+    <div
+      className={`mb-8 rounded-xl sm:mb-10 ${
+        error ? "border border-red-200 bg-red-50/50 p-3 sm:p-4" : ""
+      }`}
+    >
+      <QuestionHeader question={question} lang={lang} error={error} />
 
       {question.type === "text" && (
         <input
           type="text"
-          className={inputBase}
+          className={`${inputBase} ${error ? inputError : ""}`}
           placeholder={question.placeholder?.[lang]}
           value={(value as string) ?? ""}
           onChange={(e) => setAnswer(question.id, e.target.value)}
@@ -42,7 +57,7 @@ export default function QuestionField({ question, lang, answers, setAnswer }: Qu
 
       {question.type === "textarea" && (
         <textarea
-          className={`${inputBase} min-h-[110px] resize-y`}
+          className={`${inputBase} min-h-[110px] resize-y ${error ? inputError : ""}`}
           placeholder={question.placeholder?.[lang]}
           value={(value as string) ?? ""}
           onChange={(e) => setAnswer(question.id, e.target.value)}
@@ -65,32 +80,57 @@ export default function QuestionField({ question, lang, answers, setAnswer }: Qu
         <RankingField question={question} lang={lang} answers={answers} setAnswer={setAnswer} />
       )}
 
+      {error && (
+        <p className="mt-2 text-xs font-medium text-red-600">{UI_TEXT.errorRequired[lang]}</p>
+      )}
+
       {question.followUp && (
-        <div className="mt-4">
-          <label className="block text-sm font-medium text-foreground mb-2">
+        <div
+          className={`mt-4 ${
+            followUpError ? "rounded-xl border border-red-200 bg-red-50/50 p-3" : ""
+          }`}
+        >
+          <label className="mb-2 block text-sm font-medium text-foreground">
             {question.followUp.title[lang]}
+            {!question.followUp.optional && <span className="ml-1 text-red-500">*</span>}
           </label>
           <textarea
-            className={`${inputBase} min-h-[90px] resize-y`}
+            className={`${inputBase} min-h-[90px] resize-y ${followUpError ? inputError : ""}`}
             placeholder={question.followUp.placeholder?.[lang]}
             value={(answers[question.followUp.id] as string) ?? ""}
             onChange={(e) => setAnswer(question.followUp!.id, e.target.value)}
           />
+          {followUpError && (
+            <p className="mt-2 text-xs font-medium text-red-600">{UI_TEXT.errorRequired[lang]}</p>
+          )}
         </div>
       )}
     </div>
   );
 }
 
-function QuestionHeader({ question, lang }: { question: Question; lang: Lang }) {
+function QuestionHeader({
+  question,
+  lang,
+  error,
+}: {
+  question: Question;
+  lang: Lang;
+  error?: boolean;
+}) {
   return (
     <div className="mb-3 flex items-start gap-3">
-      <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cf-purple text-xs font-semibold text-white">
+      <span
+        className={`mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ${
+          error ? "bg-red-500" : "bg-cf-purple"
+        }`}
+      >
         {question.number}
       </span>
       <div>
         <h3 className="text-base font-semibold text-foreground leading-snug">
           {question.title[lang]}
+          {!question.optional && <span className="ml-1 text-red-500">*</span>}
         </h3>
         {question.description && (
           <p className="mt-0.5 text-xs text-cf-gray">{question.description[lang]}</p>

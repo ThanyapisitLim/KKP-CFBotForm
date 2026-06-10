@@ -37,10 +37,14 @@ export interface Question {
   rankLabels?: Bilingual[];
   limit?: number;
   placeholder?: Bilingual;
+  /** If true, this question can be left blank (default: required) */
+  optional?: boolean;
   followUp?: {
     id: string;
     title: Bilingual;
     placeholder?: Bilingual;
+    /** If true, the follow-up field can be left blank (default: required) */
+    optional?: boolean;
   };
 }
 
@@ -210,6 +214,7 @@ export const SECTIONS: Section[] = [
           id: "q8_reason",
           title: { th: "เหตุผลที่เลือกเมนูดังกล่าว", en: "Reason for your choice" },
           placeholder: { th: "ระบุเหตุผล", en: "Please describe your reason" },
+          optional: true,
         },
       },
     ],
@@ -361,6 +366,7 @@ export const SECTIONS: Section[] = [
         number: 16,
         title: { th: "ท่านต้องการให้เพิ่มเมนูใดใน CF BOT มากที่สุด เพราะเหตุใด", en: "What menu would you most like added to CF BOT, and why?" },
         placeholder: { th: "พิมพ์คำตอบของท่าน", en: "Type your answer" },
+        optional: true,
       },
       {
         id: "q17_suggestions",
@@ -368,6 +374,7 @@ export const SECTIONS: Section[] = [
         number: 17,
         title: { th: "ข้อเสนอแนะเพิ่มเติม หรือสิ่งที่อยากให้ CF BOT เป็นในอนาคต", en: "Any additional suggestions, or what you'd like CF BOT to become in the future" },
         placeholder: { th: "พิมพ์คำตอบของท่าน", en: "Type your answer" },
+        optional: true,
       },
     ],
   },
@@ -389,6 +396,10 @@ export const UI_TEXT = {
   thankYouTitle: { th: "ขอบคุณค่ะ / ครับ!", en: "Thank you!" },
   backToHome: { th: "กลับสู่หน้าแรก", en: "Back to home" },
   errorRequired: { th: "กรุณาตอบคำถามนี้ก่อนไปต่อ", en: "Please answer this question before continuing" },
+  errorRequiredSection: {
+    th: "กรุณาตอบคำถามที่มีเครื่องหมาย * ให้ครบทุกข้อก่อนไปต่อ",
+    en: "Please answer all questions marked with * before continuing",
+  },
   submitError: {
     th: "เกิดข้อผิดพลาดในการส่งแบบสอบถาม กรุณาลองใหม่อีกครั้ง",
     en: "Something went wrong submitting your feedback. Please try again.",

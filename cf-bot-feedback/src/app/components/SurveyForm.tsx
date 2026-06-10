@@ -16,6 +16,7 @@ import LangToggle from "./LangToggle";
 import ProgressBar from "./ProgressBar";
 import QuestionField, { AnswersMap, AnswerValue } from "./QuestionField";
 import { submitFeedback } from "../lib/api";
+import { getMissingRequiredQuestionIds } from "../lib/validation";
 
 type Step = "intro" | "done" | number;
 
@@ -25,9 +26,16 @@ export default function SurveyForm() {
   const [answers, setAnswers] = useState<AnswersMap>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(false);
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
 
   const setAnswer = (key: string, value: AnswerValue) => {
     setAnswers((prev) => ({ ...prev, [key]: value }));
+    setErrors((prev) => {
+      if (!prev[key]) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
   };
 
   const scrollToTop = () => {
@@ -40,6 +48,14 @@ export default function SurveyForm() {
     if (step === "intro") {
       setStep(0);
     } else if (typeof step === "number") {
+      const missing = getMissingRequiredQuestionIds(SECTIONS[step], answers);
+      if (missing.length > 0) {
+        setErrors(Object.fromEntries(missing.map((id) => [id, true])));
+        scrollToTop();
+        return;
+      }
+
+      setErrors({});
       if (step < SECTIONS.length - 1) {
         setStep(step + 1);
       } else {
@@ -52,6 +68,7 @@ export default function SurveyForm() {
 
   const goBack = () => {
     if (typeof step === "number") {
+      setErrors({});
       if (step === 0) {
         setStep("intro");
       } else {
@@ -117,6 +134,7 @@ export default function SurveyForm() {
             onBack={goBack}
             submitting={submitting}
             submitError={submitError}
+            errors={errors}
           />
         )}
 
@@ -186,6 +204,7 @@ function SectionScreen({
   onBack,
   submitting,
   submitError,
+  errors,
 }: {
   sectionIndex: number;
   lang: Lang;
@@ -195,9 +214,11 @@ function SectionScreen({
   onBack: () => void;
   submitting: boolean;
   submitError: boolean;
+  errors: Record<string, boolean>;
 }) {
   const section = SECTIONS[sectionIndex];
   const isLast = sectionIndex === SECTIONS.length - 1;
+  const hasErrors = Object.keys(errors).length > 0;
 
   return (
     <div className="flex w-full flex-col">
@@ -205,13 +226,27 @@ function SectionScreen({
         <ProgressBar current={sectionIndex} total={SECTIONS.length} lang={lang} />
       </div>
 
+      {hasErrors && (
+        <p className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+          {UI_TEXT.errorRequiredSection[lang]}
+        </p>
+      )}
+
       <div className="rounded-2xl border border-cf-gray-light bg-white p-4 shadow-sm sm:p-8">
         <h2 className="mb-5 text-base font-bold text-cf-purple-darker sm:mb-6 sm:text-xl">
           {section.title[lang]}
         </h2>
 
         {section.questions.map((q) => (
-          <QuestionField key={q.id} question={q} lang={lang} answers={answers} setAnswer={setAnswer} />
+          <QuestionField
+            key={q.id}
+            question={q}
+            lang={lang}
+            answers={answers}
+            setAnswer={setAnswer}
+            error={!!errors[q.id]}
+            followUpError={!!(q.followUp && errors[q.followUp.id])}
+          />
         ))}
       </div>
 

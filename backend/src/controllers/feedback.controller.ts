@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import { Feedback } from "../models/Feedback";
 import { FeedbackSubmission } from "../types/feedback";
 
-const VALID_LANGS = ["th", "en"];
-
 export async function createFeedback(req: Request, res: Response): Promise<void> {
   const body = req.body as Partial<FeedbackSubmission>;
 
@@ -12,12 +10,7 @@ export async function createFeedback(req: Request, res: Response): Promise<void>
     return;
   }
 
-  const { lang, answers, submittedAt } = body;
-
-  if (!lang || !VALID_LANGS.includes(lang)) {
-    res.status(400).json({ error: "Field 'lang' must be 'th' or 'en'" });
-    return;
-  }
+  const { answers, submittedAt } = body;
 
   if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
     res.status(400).json({ error: "Field 'answers' is required and must be an object" });
@@ -26,13 +19,11 @@ export async function createFeedback(req: Request, res: Response): Promise<void>
 
   try {
     const doc = await Feedback.create({
-      lang,
       answers,
       submittedAt: submittedAt ? new Date(submittedAt) : new Date(),
-      userAgent: req.get("user-agent"),
-      ip: req.ip,
     });
 
+    console.log(`[feedback] Saved submission ${doc._id}`);
     res.status(201).json({ id: doc._id, status: "ok" });
   } catch (err) {
     console.error("[feedback] Failed to save submission", err);
@@ -47,7 +38,7 @@ export async function listFeedback(req: Request, res: Response): Promise<void> {
   try {
     const [items, total] = await Promise.all([
       Feedback.find()
-        .sort({ receivedAt: -1 })
+        .sort({ submittedAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit)
         .lean(),

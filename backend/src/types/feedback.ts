@@ -19,6 +19,7 @@ export interface AnswersMap {
 
 export interface FeedbackSubmission {
   submittedAt: string; // ISO timestamp, set by client
-  lang: Lang;
+  // Frontend may also send `lang`, but we only persist answers + submittedAt.
+  lang?: Lang;
   answers: AnswersMap;
 }

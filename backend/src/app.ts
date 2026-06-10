@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import { env } from "./config/env";
 import feedbackRoutes from "./routes/feedback.routes";
@@ -8,6 +8,12 @@ export function createApp(): Express {
 
   app.use(cors({ origin: env.corsOrigin }));
   app.use(express.json({ limit: "1mb" }));
+
+  // Simple request logger - helps confirm requests are reaching the server
+  app.use((req: Request, _res: Response, next: NextFunction) => {
+    console.log(`[req] ${req.method} ${req.originalUrl}`);
+    next();
+  });
 
   app.get("/health", (_req: Request, res: Response) => {
     res.json({ status: "ok" });

@@ -68,3 +68,20 @@ export async function fetchFeedbackList(page = 1, limit = 20): Promise<FeedbackL
 
   return res.json();
 }
+
+/**
+ * Fetches every feedback submission by paging through the backend
+ * (the backend caps `limit` at 100 per request). Used for CSV export.
+ */
+export async function fetchAllFeedback(): Promise<FeedbackItem[]> {
+  const limit = 100;
+  const first = await fetchFeedbackList(1, limit);
+
+  const items = [...first.items];
+  for (let page = 2; page <= first.totalPages; page++) {
+    const next = await fetchFeedbackList(page, limit);
+    items.push(...next.items);
+  }
+
+  return items;
+}

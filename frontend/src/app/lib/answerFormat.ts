@@ -30,7 +30,8 @@ function formatValue(question: Question, answers: AnswersMap, lang: Lang): strin
       return text || EMPTY;
     }
 
-    case "radio": {
+    case "radio":
+    case "select": {
       const selectedId = value as string | undefined;
       if (!selectedId) return EMPTY;
 

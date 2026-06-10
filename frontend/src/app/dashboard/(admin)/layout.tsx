@@ -41,19 +41,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: "overview",
     },
     {
-      href: "/dashboard/analytics",
-      label: { th: "วิเคราะห์", en: "Analytics" },
-      icon: "analytics",
-    },
-    {
       href: "/dashboard/responses",
       label: { th: "คำตอบ", en: "Responses" },
       icon: "responses",
-    },
-    {
-      href: "/dashboard/reports",
-      label: { th: "รายงาน", en: "Reports" },
-      icon: "reports",
     },
   ];
 

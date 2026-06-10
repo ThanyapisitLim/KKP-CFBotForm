@@ -78,8 +78,8 @@ export default function ReportsPage() {
 
   return (
     <div>
-      <h1 className="mb-2 text-3xl font-bold text-slate-900">รายงาน</h1>
-      <p className="mb-8 text-slate-600">
+      <h1 className="mb-2 text-3xl font-bold text-foreground">รายงาน</h1>
+      <p className="mb-8 text-cf-gray">
         สรุปการตอบและข้อเสนอแนะจากผู้ตอบแบบสอบถาม
       </p>
 
@@ -90,20 +90,20 @@ export default function ReportsPage() {
       )}
 
       {loading ? (
-        <div className="rounded-lg border border-slate-200 bg-white p-12 text-center">
-          <p className="text-slate-500">กำลังโหลดข้อมูล...</p>
+        <div className="rounded-lg border border-cf-gray-light bg-white p-12 text-center">
+          <p className="text-cf-gray">กำลังโหลดข้อมูล...</p>
         </div>
       ) : !data ? (
-        <div className="rounded-lg border border-slate-200 bg-white p-12 text-center">
-          <p className="text-slate-500">ไม่พบข้อมูล</p>
+        <div className="rounded-lg border border-cf-gray-light bg-white p-12 text-center">
+          <p className="text-cf-gray">ไม่พบข้อมูล</p>
         </div>
       ) : (
         <div className="space-y-8">
-          <div className="rounded-lg border border-slate-200 bg-white p-6">
-            <p className="mb-2 text-sm font-medium text-slate-600">
+          <div className="rounded-lg border border-cf-gray-light bg-white p-6">
+            <p className="mb-2 text-sm font-medium text-cf-gray">
               รวมการตอบรับ
             </p>
-            <p className="text-4xl font-bold text-slate-900">
+            <p className="text-4xl font-bold text-foreground">
               {data.totalResponses}
             </p>
           </div>
@@ -113,8 +113,8 @@ export default function ReportsPage() {
               const hasMultipleOptions = (options as any[]).length > 1;
 
               return (
-                <div key={questionId} className="rounded-lg border border-slate-200 bg-white p-6">
-                  <h3 className="mb-6 font-semibold text-slate-900">
+                <div key={questionId} className="rounded-lg border border-cf-gray-light bg-white p-6">
+                  <h3 className="mb-6 font-semibold text-foreground">
                     {questionId}
                   </h3>
 
@@ -123,16 +123,16 @@ export default function ReportsPage() {
                       {(options as any[]).map((opt: any, idx: number) => (
                         <div key={idx}>
                           <div className="mb-2 flex items-center justify-between text-sm">
-                            <span className="font-medium text-slate-700">
+                            <span className="font-medium text-foreground">
                               {opt.label}
                             </span>
-                            <span className="text-slate-600">
+                            <span className="text-cf-gray">
                               {opt.value} ({opt.percentage}%)
                             </span>
                           </div>
-                          <div className="h-2 overflow-hidden rounded-full bg-slate-200">
+                          <div className="h-2 overflow-hidden rounded-full bg-cf-gray-light">
                             <div
-                              className="h-full bg-indigo-600 transition-all"
+                              className="h-full bg-[#6d6fae] transition-all"
                               style={{
                                 width: `${opt.percentage}%`,
                               }}
@@ -143,10 +143,10 @@ export default function ReportsPage() {
                     </div>
                   ) : (
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-slate-700">
+                      <span className="font-medium text-foreground">
                         {(options as any[])[0]?.label}
                       </span>
-                      <span className="text-2xl font-bold text-indigo-600">
+                      <span className="text-2xl font-bold text-[#6d6fae]">
                         {(options as any[])[0]?.value}
                       </span>
                     </div>

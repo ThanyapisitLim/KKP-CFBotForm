@@ -69,7 +69,7 @@ export default function AnalyticsPage() {
   if (error) {
     return (
       <div>
-        <h1 className="mb-2 text-3xl font-bold text-slate-900">
+        <h1 className="mb-2 text-3xl font-bold text-foreground">
           การวิเคราะห์
         </h1>
         <p className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -81,64 +81,64 @@ export default function AnalyticsPage() {
 
   return (
     <div>
-      <h1 className="mb-2 text-3xl font-bold text-slate-900">
+      <h1 className="mb-2 text-3xl font-bold text-foreground">
         การวิเคราะห์
       </h1>
-      <p className="mb-8 text-slate-600">แนวโน้มและกราฟการตอบรับแบบสอบถาม</p>
+      <p className="mb-8 text-cf-gray">แนวโน้มและกราฟการตอบรับแบบสอบถาม</p>
 
       {loading ? (
-        <div className="rounded-lg border border-slate-200 bg-white p-12 text-center">
-          <p className="text-slate-500">กำลังโหลดข้อมูล...</p>
+        <div className="rounded-lg border border-cf-gray-light bg-white p-12 text-center">
+          <p className="text-cf-gray">กำลังโหลดข้อมูล...</p>
         </div>
       ) : chartData.length === 0 ? (
-        <div className="rounded-lg border border-slate-200 bg-white p-12 text-center">
-          <p className="text-slate-500">ยังไม่มีข้อมูลเพียงพอ</p>
+        <div className="rounded-lg border border-cf-gray-light bg-white p-12 text-center">
+          <p className="text-cf-gray">ยังไม่มีข้อมูลเพียงพอ</p>
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="rounded-lg border border-slate-200 bg-white p-6">
-            <h2 className="mb-4 text-lg font-bold text-slate-900">
+          <div className="rounded-lg border border-cf-gray-light bg-white p-6">
+            <h2 className="mb-4 text-lg font-bold text-foreground">
               การตอบรับรายวัน
             </h2>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="date" tick={{ fontSize: 12, fill: "#64748b" }} />
-                <YAxis tick={{ fontSize: 12, fill: "#64748b" }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="date" tick={{ fontSize: 12, fill: "#6b7280" }} />
+                <YAxis tick={{ fontSize: 12, fill: "#6b7280" }} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#fff",
-                    border: "1px solid #e2e8f0",
+                    border: "1px solid #e5e7eb",
                     borderRadius: "6px",
                   }}
                 />
-                <Bar dataKey="responses" fill="#6366f1" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="responses" fill="#6d6fae" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-white p-6">
-            <h2 className="mb-4 text-lg font-bold text-slate-900">
+          <div className="rounded-lg border border-cf-gray-light bg-white p-6">
+            <h2 className="mb-4 text-lg font-bold text-foreground">
               การตอบรับสะสม
             </h2>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="date" tick={{ fontSize: 12, fill: "#64748b" }} />
-                <YAxis tick={{ fontSize: 12, fill: "#64748b" }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="date" tick={{ fontSize: 12, fill: "#6b7280" }} />
+                <YAxis tick={{ fontSize: 12, fill: "#6b7280" }} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#fff",
-                    border: "1px solid #e2e8f0",
+                    border: "1px solid #e5e7eb",
                     borderRadius: "6px",
                   }}
                 />
                 <Line
                   type="monotone"
                   dataKey="cumulative"
-                  stroke="#6366f1"
+                  stroke="#6d6fae"
                   strokeWidth={2}
-                  dot={{ fill: "#6366f1", r: 4 }}
+                  dot={{ fill: "#6d6fae", r: 4 }}
                 />
               </LineChart>
             </ResponsiveContainer>

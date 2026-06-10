@@ -11,10 +11,10 @@ interface StatCardProps {
 }
 
 const StatCard = ({ label, value, unit }: StatCardProps) => (
-  <div className="rounded-lg border border-slate-200 bg-white p-6">
-    <p className="mb-2 text-sm font-medium text-slate-600">{label}</p>
-    <p className="text-3xl font-bold text-slate-900">{value}</p>
-    {unit && <p className="mt-1 text-xs text-slate-500">{unit}</p>}
+  <div className="rounded-lg border border-cf-gray-light bg-white p-6">
+    <p className="mb-2 text-sm font-medium text-cf-gray">{label}</p>
+    <p className="text-3xl font-bold text-foreground">{value}</p>
+    {unit && <p className="mt-1 text-xs text-cf-gray">{unit}</p>}
   </div>
 );
 
@@ -76,10 +76,10 @@ export default function OverviewPage() {
 
   return (
     <div>
-      <h1 className="mb-2 text-3xl font-bold text-slate-900">
+      <h1 className="mb-2 text-3xl font-bold text-foreground">
         ภาพรวมฟีดแบ็ก
       </h1>
-      <p className="mb-8 text-slate-600">
+      <p className="mb-8 text-cf-gray">
         ข้อมูลสรุปสถิติหลักของการตอบรับแบบสอบถาม
       </p>
 

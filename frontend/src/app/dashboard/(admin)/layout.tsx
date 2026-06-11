@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import Logo from "../../components/Logo";
-import LangToggle from "../../components/LangToggle";
-import { Lang } from "../../data/survey";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -34,23 +32,22 @@ const NavIcon = ({ icon }: { icon: string }) => (
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const [lang, setLang] = useState<Lang>("th");
   const [loggingOut, setLoggingOut] = useState(false);
 
   const navItems = [
     {
       href: "/dashboard",
-      label: { th: "ภาพรวม", en: "Overview" },
+      label: "ภาพรวม",
       icon: "overview",
     },
     {
       href: "/dashboard/responses",
-      label: { th: "คำตอบ", en: "Responses" },
+      label: "คำตอบ",
       icon: "responses",
     },
     {
       href: "/dashboard/export",
-      label: { th: "ส่งออกข้อมูล", en: "Export" },
+      label: "ส่งออกข้อมูล",
       icon: "export",
     },
   ];
@@ -78,14 +75,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
           <Logo />
           <div className="flex items-center gap-2 sm:gap-3">
-            <LangToggle lang={lang} onChange={setLang} />
             <button
               type="button"
               onClick={handleLogout}
               disabled={loggingOut}
               className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60"
             >
-              {loggingOut ? "..." : "Logout"}
+              {loggingOut ? "กำลังออกจากระบบ..." : "ออกจากระบบ"}
             </button>
           </div>
         </div>
@@ -104,7 +100,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               }`}
             >
               <NavIcon icon={item.icon} />
-              {item.label[lang]}
+              {item.label}
             </Link>
           ))}
         </nav>

@@ -3,12 +3,10 @@
 import { useEffect, useState } from "react";
 import { FeedbackItem, fetchFeedbackList } from "../../../lib/api";
 import { formatSubmission } from "../../../lib/answerFormat";
-import { Lang } from "../../../data/survey";
 
 const PAGE_SIZE = 20;
 
 export default function ResponsesPage() {
-  const [lang, setLang] = useState<Lang>("th");
   const [items, setItems] = useState<FeedbackItem[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -90,9 +88,7 @@ export default function ResponsesPage() {
                   </span>
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-foreground">
-                      {new Date(item.submittedAt).toLocaleString(
-                        lang === "th" ? "th-TH" : "en-US"
-                      )}
+                      {new Date(item.submittedAt).toLocaleString("th-TH")}
                     </p>
                     <p className="truncate text-xs text-cf-gray">{item._id}</p>
                   </div>
@@ -104,7 +100,7 @@ export default function ResponsesPage() {
 
               {isExpanded && (
                 <div className="border-t border-cf-gray-light px-4 py-4 sm:px-6">
-                  {formatSubmission(item.answers, lang).map((section) => (
+                  {formatSubmission(item.answers, "th").map((section) => (
                     <div key={section.id} className="mb-5 last:mb-0">
                       <h3 className="mb-2 text-sm font-bold text-cf-purple-darker">
                         {section.title}
@@ -138,7 +134,7 @@ export default function ResponsesPage() {
             disabled={page <= 1 || loading}
             className="rounded-xl border border-cf-gray-light bg-white px-4 py-2 text-sm font-semibold text-cf-gray transition hover:border-cf-purple/50 hover:text-cf-purple-dark disabled:opacity-50"
           >
-            {lang === "th" ? "ก่อนหน้า" : "Prev"}
+            ก่อนหน้า
           </button>
           <span className="text-sm text-cf-gray">
             {page} / {totalPages}
@@ -149,7 +145,7 @@ export default function ResponsesPage() {
             disabled={page >= totalPages || loading}
             className="rounded-xl border border-cf-gray-light bg-white px-4 py-2 text-sm font-semibold text-cf-gray transition hover:border-cf-purple/50 hover:text-cf-purple-dark disabled:opacity-50"
           >
-            {lang === "th" ? "ถัดไป" : "Next"}
+            ถัดไป
           </button>
         </div>
       )}

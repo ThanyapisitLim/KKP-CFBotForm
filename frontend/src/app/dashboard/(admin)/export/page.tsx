@@ -1,32 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import LangToggle from "../../../components/LangToggle";
-import { Lang } from "../../../data/survey";
 import { fetchAllFeedback, fetchFeedbackList } from "../../../lib/api";
 import { buildFeedbackCsv, downloadCsv } from "../../../lib/csv";
 
 const TEXT = {
-  title: { th: "ส่งออกข้อมูล CSV", en: "Export CSV" },
-  description: {
-    th: "ดาวน์โหลดคำตอบแบบสอบถามทั้งหมดเป็นไฟล์ CSV (เปิดด้วย Excel/Google Sheets ได้)",
-    en: "Download all survey responses as a CSV file (opens in Excel/Google Sheets)",
-  },
-  totalLabel: { th: "จำนวนคำตอบทั้งหมด", en: "Total responses" },
-  items: { th: "รายการ", en: "items" },
-  csvLanguage: { th: "ภาษาของหัวตาราง (CSV)", en: "CSV column language" },
-  download: { th: "ดาวน์โหลด CSV", en: "Download CSV" },
-  preparing: { th: "กำลังเตรียมไฟล์...", en: "Preparing file..." },
-  loading: { th: "กำลังโหลด...", en: "Loading..." },
-  noData: { th: "ยังไม่มีข้อมูลให้ส่งออก", en: "No data to export yet" },
-  error: {
-    th: "โหลดข้อมูลไม่สำเร็จ กรุณาตรวจสอบว่า backend ทำงานอยู่",
-    en: "Failed to load data. Please check that the backend is running.",
-  },
+  title: "ส่งออกข้อมูล CSV",
+  description: "ดาวน์โหลดคำตอบแบบสอบถามทั้งหมดเป็นไฟล์ CSV (เปิดด้วย Excel/Google Sheets ได้)",
+  totalLabel: "จำนวนคำตอบทั้งหมด",
+  items: "รายการ",
+  download: "ดาวน์โหลด CSV",
+  preparing: "กำลังเตรียมไฟล์...",
+  loading: "กำลังโหลด...",
+  noData: "ยังไม่มีข้อมูลให้ส่งออก",
+  error: "โหลดข้อมูลไม่สำเร็จ กรุณาตรวจสอบว่า backend ทำงานอยู่",
 } as const;
 
 export default function ExportPage() {
-  const [csvLang, setCsvLang] = useState<Lang>("th");
   const [total, setTotal] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
@@ -46,7 +36,7 @@ export default function ExportPage() {
       } catch (err) {
         if (cancelled) return;
         console.error("Failed to load feedback total", err);
-        setError(TEXT.error[csvLang]);
+        setError(TEXT.error);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -57,7 +47,6 @@ export default function ExportPage() {
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleExport = async () => {
@@ -66,13 +55,13 @@ export default function ExportPage() {
 
     try {
       const items = await fetchAllFeedback();
-      const csv = buildFeedbackCsv(items, csvLang);
+      const csv = buildFeedbackCsv(items, "th");
 
       const today = new Date().toISOString().slice(0, 10);
       downloadCsv(csv, `cf-bot-feedback-${today}.csv`);
     } catch (err) {
       console.error("Failed to export feedback", err);
-      setError(TEXT.error[csvLang]);
+      setError(TEXT.error);
     } finally {
       setExporting(false);
     }
@@ -81,8 +70,8 @@ export default function ExportPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="mb-1 text-2xl font-bold text-foreground">{TEXT.title[csvLang]}</h1>
-        <p className="text-sm text-cf-gray">{TEXT.description[csvLang]}</p>
+        <h1 className="mb-1 text-2xl font-bold text-foreground">{TEXT.title}</h1>
+        <p className="text-sm text-cf-gray">{TEXT.description}</p>
       </div>
 
       {error && (
@@ -94,20 +83,13 @@ export default function ExportPage() {
       <div className="rounded-2xl border border-cf-gray-light bg-white p-6">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <span className="text-sm font-medium text-cf-gray">{TEXT.totalLabel[csvLang]}</span>
+            <span className="text-sm font-medium text-cf-gray">{TEXT.totalLabel}</span>
             <div className="mt-1 flex items-baseline gap-2">
               <span className="text-4xl font-bold text-cf-purple-dark">
                 {loading ? "—" : (total ?? 0).toLocaleString()}
               </span>
-              <span className="text-sm text-cf-gray">{TEXT.items[csvLang]}</span>
+              <span className="text-sm text-cf-gray">{TEXT.items}</span>
             </div>
-          </div>
-
-          <div>
-            <label className="mb-1.5 block text-xs font-semibold text-cf-gray">
-              {TEXT.csvLanguage[csvLang]}
-            </label>
-            <LangToggle lang={csvLang} onChange={setCsvLang} />
           </div>
         </div>
 
@@ -125,11 +107,11 @@ export default function ExportPage() {
               d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"
             />
           </svg>
-          {exporting ? TEXT.preparing[csvLang] : TEXT.download[csvLang]}
+          {exporting ? TEXT.preparing : TEXT.download}
         </button>
 
         {!loading && (total ?? 0) === 0 && (
-          <p className="mt-4 text-sm text-cf-gray">{TEXT.noData[csvLang]}</p>
+          <p className="mt-4 text-sm text-cf-gray">{TEXT.noData}</p>
         )}
       </div>
     </div>

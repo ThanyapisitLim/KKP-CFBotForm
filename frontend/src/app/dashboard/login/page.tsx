@@ -45,13 +45,13 @@ export default function AdminLoginPage() {
           <Logo />
         </div>
 
-        <h1 className="mb-1 text-center text-lg font-bold text-foreground">Admin Dashboard</h1>
+        <h1 className="mb-1 text-center text-lg font-bold text-foreground">หน้าผู้ดูแลระบบ</h1>
         <p className="mb-6 text-center text-sm text-cf-gray">CF BOT Feedback</p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label htmlFor="username" className="mb-1 block text-sm font-medium text-foreground">
-              Username
+              ชื่อผู้ใช้งาน
             </label>
             <input
               id="username"
@@ -66,7 +66,7 @@ export default function AdminLoginPage() {
 
           <div>
             <label htmlFor="password" className="mb-1 block text-sm font-medium text-foreground">
-              Password
+              รหัสผ่าน
             </label>
             <input
               id="password"
